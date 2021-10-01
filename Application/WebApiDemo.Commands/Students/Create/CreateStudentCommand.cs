@@ -1,8 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using StudentData = WebApiDemo.Entities.Model.Student;
 
-namespace WebApiDemo.Entities.DTO.InputDTO
+namespace WebApiDemo.Commands.Students.Create
 {
-    public class StudentForUpdationDTO
+    public class CreateStudentCommand : IRequest<StudentData>
     {
         [Required]
         [MinLength(3)]
@@ -14,6 +19,8 @@ namespace WebApiDemo.Entities.DTO.InputDTO
         [MaxLength(10)]
         public string ContactNo { get; set; }
 
+        [Required]
+        public int RollNo { get; set; }
 
         [Required]
         [MinLength(5)]

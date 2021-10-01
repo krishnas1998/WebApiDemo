@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebApiDemo.Entities.Model
+﻿namespace WebApiDemo.Entities.Model
 {
     public class Student
     {
+        //public Student(int id, string contactNo)
+        //{
+        //    Id = id;
+        //    ContactNo = contactNo;
+        //}
         public int Id { get; set; }
         public string ContactNo { get; set; }
         public string Name { get; set; }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebApiDemo.Entities.DTO.OutputDTO
+﻿namespace WebApiDemo.Entities.DTO.OutputDTO
 {
     public class StudentOutputDTO
     {

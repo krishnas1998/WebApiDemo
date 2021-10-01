@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiDemo.Commands.Students.Create;
 using WebApiDemo.Contracts;
 using WebApiDemo.Entities.DTO.InputDTO;
 using WebApiDemo.Entities.DTO.OutputDTO;
@@ -21,11 +23,14 @@ namespace WebApiDemo.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         public StudentsController(
+            IMediator mediator,
             IStudentService studentService,
             IMapper mapper
             )
         {
+            _mediator = mediator;
             _studentService = studentService;
             _mapper = mapper;
 
@@ -60,18 +65,13 @@ namespace WebApiDemo.Controllers
         // POST api/<StudentController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post([FromBody] StudentForCreationDTO studentDTO)
+        public async Task<IActionResult> Post([FromBody] CreateStudentCommand studentDTO)
         {
-            Student newStudent = _mapper.Map<Student>(studentDTO);
-            Student oldStudent = _studentService.GetStudent(newStudent.RollNo);
-            if (oldStudent != null)
-            {
-                ModelState.AddModelError("Roll No", "Roll no already taken");
-                return BadRequest(ModelState);
-            }
-            _studentService.CreateStudent(newStudent);
+            Student newStudent = await _mediator.Send(studentDTO);
+            
+           
             return CreatedAtAction(nameof(Post), newStudent);
         }
 

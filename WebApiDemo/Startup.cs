@@ -1,20 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using WebApiDemo.Configurations;
+using WebApiDemo.Infrastructure.Middleware;
 
 namespace WebApiDemo
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -31,6 +26,7 @@ namespace WebApiDemo
             services.EnableCors();
             services.AddAutoMapper();
             services.AddServices();
+            services.AddMediateRServices();
             services.AddControllers();
         }
 
@@ -41,16 +37,16 @@ namespace WebApiDemo
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseExceptionHandler(options =>
-            {
-                options.Run(async context =>
-                {
-                    context.Response.StatusCode = 500;
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync("Internal Server Error");
-                });
-            });
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            //app.UseExceptionHandler(options =>
+            //{
+            //    options.Run(async context =>
+            //    {
+            //        context.Response.StatusCode = 500;
+            //        context.Response.ContentType = "application/json";
+            //        await context.Response.WriteAsync("Internal Server Error");
+            //    });
+            //});
 
             app.UseHttpsRedirection();
 

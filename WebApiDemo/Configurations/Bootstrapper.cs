@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebApiDemo.Commands.Students.Create;
 using WebApiDemo.Contracts;
 using WebApiDemo.Mapping;
 using WebApiDemo.Services;
@@ -33,6 +31,11 @@ namespace WebApiDemo.Configurations
                     builder.AllowAnyHeader();
                 });
             });
+        }
+
+        public static void AddMediateRServices(this IServiceCollection services)
+        {
+            services.AddMediatR(typeof(CreateStudentCommandHandler));
         }
     }
 }
