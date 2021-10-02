@@ -1,5 +1,7 @@
+using FluentAssertions;
 using NUnit.Framework;
 using WebApiDemo.Entities.Model;
+using WebApiDemo.Test.Infrastructure;
 
 namespace WebApiDemo.Services.Tests
 {
@@ -15,10 +17,10 @@ namespace WebApiDemo.Services.Tests
             _studentService = new StudentService();
         }
 
-        [Test]
+        [Theory]
         [TestCase(1, "Hno23", "8826013933", "Krishna", 20)]
         [TestCase(1, "Hno23", "8826013933", "Krishna", 20)]
-        public void CreateStudentTest(int id, string address, string contactNo, string name, int rollNo)
+        public void CreateStudentTest1(int id, string address, string contactNo, string name, int rollNo)
         {
             Student student = new Student()
             {
@@ -31,6 +33,16 @@ namespace WebApiDemo.Services.Tests
             _studentService.CreateStudent(student);
             
             Assert.AreEqual(student, _studentService.GetStudent(rollNo));
+        }
+
+        [Theory]
+        [AutoMoqData]
+        public void CreateStudentTest(Student student)
+        {
+           
+            _studentService.CreateStudent(student);
+
+            student.Should().Be(_studentService.GetStudent(student.RollNo));
         }
     }
 }

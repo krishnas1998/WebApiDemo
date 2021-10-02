@@ -10,11 +10,19 @@ namespace WebApiDemo.Mapping
     {
         public StudentProfile()
         {
-            CreateMap<CreateStudentCommand, Student>();
+            CreateMap<CreateStudentCommand, Student>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
             CreateMap<Student, StudentOutputDTO>();
+
             CreateMap<StudentForCreationDTO, CreateStudentCommand>();
-            CreateMap<StudentForCreationDTO, Student>();
-            CreateMap<StudentForUpdationDTO, Student>();
+
+            CreateMap<StudentForCreationDTO, Student>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<StudentForUpdationDTO, Student>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.RollNo, opt => opt.Ignore());
 
         }
     }
